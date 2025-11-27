@@ -56,11 +56,17 @@ function BarraNavegacion() {
 
           <Nav>
             {!isVendedor && (
-              <Nav.Link as={Link} to="/carrito" className="position-relative me-3">
-                <CartFill size={20} style={{ marginRight: '5px' }} />
+              <Nav.Link as={Link} to="/carrito" className="position-relative me-3 d-flex align-items-center">
+                <CartFill size={20} className="me-2" />
                 Carrito
                 {cantidadTotal > 0 && (
-                  <Badge pill bg="warning" text="dark" className="position-absolute top-0 start-100 translate-middle" style={{ fontSize: '0.7rem' }}>
+                  <Badge
+                    pill
+                    bg="warning"
+                    text="dark"
+                    className="position-absolute start-100 translate-middle-x"
+                    style={{ top: '8px', fontSize: '0.65rem', padding: '0.2em 0.45em' }}
+                  >
                     {cantidadTotal}
                   </Badge>
                 )}

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 // 🔑 Importamos Alert para mostrar el mensaje de éxito en la página
-import { Form, Button, Container, Row, Col, Card, Alert } from 'react-bootstrap'; 
-import { Link } from 'react-router-dom'; 
-import './Contacto.css'; 
+import { Form, Button, Container, Row, Col, Card, Alert } from 'react-bootstrap';
+import './Contacto.css';
 
 const Contacto = () => {
   const [formData, setFormData] = useState({
@@ -14,11 +13,11 @@ const Contacto = () => {
   const [errors, setErrors] = useState({});
   const [caracteresMensaje, setCaracteresMensaje] = useState(0);
   // 🔑 NUEVO ESTADO: Para controlar la visibilidad del mensaje de éxito
-  const [envioExitoso, setEnvioExitoso] = useState(false); 
+  const [envioExitoso, setEnvioExitoso] = useState(false);
 
   // Expresiones regulares para validación
   const emailRegex = /^[a-zA-Z0-9._%+-]+@(?:gmail\.com|duocuc\.cl|profesor\.cl)$/;
-  const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{10,}$/; 
+  const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{10,}$/;
   const mensajeMinLength = 100;
 
   const handleChange = (e) => {
@@ -39,13 +38,13 @@ const Contacto = () => {
       });
     }
     // Si el usuario edita, ocultamos el mensaje de éxito anterior
-    setEnvioExitoso(false); 
+    setEnvioExitoso(false);
   };
 
   const validate = () => {
     let newErrors = {};
     let isValid = true;
-    
+
     // Validación de Nombre
     if (!formData.nombre.trim()) {
       newErrors.nombre = 'El nombre es obligatorio.';
@@ -54,8 +53,8 @@ const Contacto = () => {
       newErrors.nombre = 'Debe tener al menos 10 caracteres y dos palabras (Ej: Jorge Alvarado).';
       isValid = false;
     } else if (formData.nombre.trim().split(' ').filter(Boolean).length < 2) {
-        newErrors.nombre = 'Debe contener al menos dos palabras.';
-        isValid = false;
+      newErrors.nombre = 'Debe contener al menos dos palabras.';
+      isValid = false;
     }
 
     // Validación de Correo
@@ -84,20 +83,20 @@ const Contacto = () => {
     e.preventDefault();
     if (validate()) {
       console.log('Formulario enviado:', formData);
-      
+
       // 🔑 1. Establecer el estado de éxito (REEMPLAZA EL ALERT)
-      setEnvioExitoso(true); 
-      
+      setEnvioExitoso(true);
+
       // 2. Resetear el formulario
       setFormData({ nombre: '', correo: '', mensaje: '' });
       setCaracteresMensaje(0);
       setErrors({});
-      
+
       // 3. Opcional: Ocultar el mensaje después de 5 segundos
       setTimeout(() => {
         setEnvioExitoso(false);
-      }, 5000); 
-      
+      }, 5000);
+
     } else {
       console.log('Errores en el formulario:', errors);
       // No se necesita alert aquí, los errores se muestran al lado de los campos
@@ -111,11 +110,11 @@ const Contacto = () => {
           <Card className="p-4 shadow-sm">
             <Card.Body>
               <h2 className="text-center mb-4 titulo-contacto">Contáctanos</h2>
-              
+
               {/* 🔑 MOSTRAR EL MENSAJE DE ÉXITO CONDICIONALMENTE */}
               {envioExitoso && (
                 <Alert variant="success" onClose={() => setEnvioExitoso(false)} dismissible className="alerta-exito">
-                    ¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.
+                  ¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.
                 </Alert>
               )}
 
@@ -179,14 +178,10 @@ const Contacto = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <div className="d-flex justify-content-between align-items-center mt-4">
+                <div className="d-flex justify-content-start align-items-center mt-4">
                   <Button variant="primary" type="submit" className="btn-enviar-mensaje">
                     Enviar Mensaje
                   </Button>
-                  <div>
-                    <Link to="/login" className="me-3">Inicia sesión</Link>
-                    <Link to="/registro">Registro</Link>
-                  </div>
                 </div>
               </Form>
             </Card.Body>
