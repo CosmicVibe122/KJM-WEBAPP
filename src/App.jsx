@@ -11,6 +11,7 @@ import AdminPanel from "./components/AdminPanel.jsx";
 import Nosotros from "./components/Nosotros.jsx";
 import Contacto from "./components/Contacto.jsx";
 import Checkout from "./components/Checkout.jsx"; // Componente de Checkout
+import ConfirmacionCompra from "./components/ConfirmacionCompra.jsx";
 import { useAuth } from './context/AuthContext.jsx';
 import MiPerfil from "./components/MiPerfil.jsx";
 import MisCompras from "./components/MisCompras.jsx";
@@ -50,6 +51,7 @@ function App() {
 
           {/* RUTA DE PAGO (Checkout) */}
           <Route path="/checkout" element={<ClientGuard><Checkout /></ClientGuard>} />
+          <Route path="/confirmacion" element={<ClientGuard><ConfirmacionCompra /></ClientGuard>} />
 
           {/* Rutas de Información */}
           <Route path="/nosotros" element={<ClientGuard><Nosotros /></ClientGuard>} />

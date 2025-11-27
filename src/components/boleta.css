@@ -1,0 +1,38 @@
+/* Estilos para impresión de la boleta */
+.printable {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+@media print {
+  /* Ocultar todo excepto la sección imprimible */
+  body * {
+    visibility: hidden !important;
+  }
+  .printable, .printable * {
+    visibility: visible !important;
+  }
+  .printable {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 0.5cm;
+  }
+  /* Quitar sombras y bordes para impresión más limpia */
+  .printable .card {
+    box-shadow: none !important;
+    border: none !important;
+  }
+  /* No imprimir los botones de navegación */
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Ajustes responsive para pantalla */
+@media (max-width: 576px) {
+  .printable {
+    padding: 0.5rem;
+  }
+}

@@ -119,8 +119,11 @@ function Checkout() {
                 ? error.message
                 : 'Error al procesar la compra. Inténtalo de nuevo.';
             setAlerta({ variant: 'danger', message });
+            
         }
     };
+
+    
 
 
     if (carrito.length === 0 && !compraFinalizada) {
@@ -278,6 +281,7 @@ function Checkout() {
                                 <Button type="submit" variant="success" size="lg" className="w-100 mt-4">
                                     Confirmar y Pagar {formatoMoneda(total)}
                                 </Button>
+                                {/* Botón de simulación eliminado */}
                             </Card.Body>
                         </Card>
                     </Col>

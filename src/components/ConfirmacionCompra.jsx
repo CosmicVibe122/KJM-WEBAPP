@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Card, Row, Col, ListGroup, Button, Alert } from 'react-bootstrap';
 import { useLocation, Link } from 'react-router-dom';
+import './boleta.css';
 
 function ConfirmacionCompra() {
     // Usamos useLocation para obtener los datos pasados desde Checkout
@@ -44,6 +45,7 @@ function ConfirmacionCompra() {
 
     return (
         <Container className="my-5">
+            <div className="printable">
             <Card className="shadow-lg border-0">
                 <Card.Header className="bg-success text-white text-center p-4">
                     <h3>✅ ¡Pago Exitoso!</h3>
@@ -98,7 +100,7 @@ function ConfirmacionCompra() {
                     </Row>
 
                 </Card.Body>
-                <Card.Footer className="d-flex justify-content-center gap-3 p-3 bg-light">
+                <Card.Footer className="d-flex justify-content-center gap-3 p-3 bg-light no-print">
                     <Link to="/productos">
                         <Button variant="primary">Seguir Comprando</Button>
                     </Link>
@@ -107,6 +109,7 @@ function ConfirmacionCompra() {
                     </Button>
                 </Card.Footer>
             </Card>
+            </div>
         </Container>
     );
 }
