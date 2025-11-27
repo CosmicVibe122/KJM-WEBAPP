@@ -3,11 +3,11 @@ import { useCarrito } from '../context/CarritoContext';
 import { useAuth } from '../context/AuthContext';
 import { Container, Row, Col, Card, Form, Button, ListGroup, Alert } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
-import { CartX } from 'react-bootstrap-icons'; 
+import { CartX } from 'react-bootstrap-icons';
 
 function Checkout() {
     const { carrito, total, vaciarCarrito } = useCarrito();
-    const { usuario } = useAuth(); 
+    const { usuario } = useAuth();
     const navigate = useNavigate();
 
     // 1. Inicialización de Estado (Pre-carga de datos del usuario logueado)
@@ -15,7 +15,7 @@ function Checkout() {
         if (usuario) {
             const nombreCompleto = usuario.nombre || '';
             const partesNombre = nombreCompleto.split(' ');
-            
+
             return {
                 nombre: partesNombre.length > 0 ? partesNombre[0] : '',
                 apellido: partesNombre.length > 1 ? partesNombre.slice(1).join(' ') : '',
@@ -26,7 +26,7 @@ function Checkout() {
             };
         }
         return {
-            nombre: '', apellido: '', email: '', telefono: '', direccion: '', 
+            nombre: '', apellido: '', email: '', telefono: '', direccion: '',
             ciudad: '', region: '', codigoPostal: '', comentarios: ''
         };
     });
@@ -39,13 +39,13 @@ function Checkout() {
     const formatoMoneda = (valor) => {
         return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(valor);
     };
-    
-    const subtotal = total; 
+
+    const subtotal = total;
 
     // 2. Redirigir si el carrito está vacío
     useEffect(() => {
         if (carrito.length === 0 && !compraFinalizada) {
-            const timer = setTimeout(() => navigate('/productos'), 100); 
+            const timer = setTimeout(() => navigate('/productos'), 100);
             return () => clearTimeout(timer);
         }
     }, [carrito, navigate, compraFinalizada]);
@@ -58,60 +58,75 @@ function Checkout() {
     const handleFinalizarCompra = async (e) => {
         e.preventDefault();
         setAlerta(null);
-        
+
         if (total === 0) {
             setAlerta({ variant: 'warning', message: 'El carrito está vacío.' });
             return;
         }
 
-        // --- PREPARACIÓN DE DATOS PARA LA API ---
-        const boletaData = {
-            usuarioId: usuario ? usuario.id : null,
-            datosCliente,
-            metodoPago,
+        // --- PREPARACIÓN DE DATOS PARA LA API (según BoletaController) ---
+        const boletaPayload = {
+            usuario: usuario ? { id: usuario.id } : undefined,
             detalles: carrito.map(item => ({
-                productoId: item.id,
-                nombreProducto: item.nombre,
-                cantidad: item.cantidad,
-                precioUnitario: item.precio
-            })),
-            total
+                producto: { id: item.id },
+                cantidad: item.cantidad
+            }))
         };
 
         try {
-            // 🚨 SIMULACIÓN: Aquí iría el FETCH REAL a la API /api/boletas
-            
-            // Simulación de éxito con pequeño delay
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
+            // Enviar boleta al backend
+            const res = await fetch('http://localhost:8080/api/boletas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(boletaPayload)
+            });
+
+            if (!res.ok) {
+                const msg = await res.text();
+                throw new Error(msg || `Error ${res.status} al generar boleta`);
+            }
+
+            const boleta = await res.json();
+
             // Acciones de éxito
             setCompraFinalizada(true);
             vaciarCarrito();
-            
+
             // 🔑 NAVEGAR A LA PÁGINA DE CONFIRMACIÓN (pasando los datos)
             navigate('/confirmacion', {
                 state: {
                     orderDetails: {
                         cliente: datosCliente,
-                        productos: boletaData.detalles, 
+                        productos: carrito.map(item => ({
+                            id: item.id,
+                            nombre: item.nombre,
+                            cantidad: item.cantidad,
+                            precioUnitario: item.precio
+                        })),
                         metodoPago: metodoPago,
-                        total: total
+                        total: boleta.total,
+                        numeroBoleta: boleta.numero || boleta.id,
+                        fecha: boleta.fecha
                     }
                 },
                 replace: true
             });
-            
+
         } catch (error) {
             console.error("Fallo al enviar boleta:", error);
-            setAlerta({ variant: 'danger', message: 'Error al procesar la compra. Inténtalo de nuevo.' });
+            // Mostrar mensaje de stock insuficiente u otros errores
+            const message = (error.message || '').includes('No hay suficiente stock')
+                ? error.message
+                : 'Error al procesar la compra. Inténtalo de nuevo.';
+            setAlerta({ variant: 'danger', message });
         }
     };
 
 
     if (carrito.length === 0 && !compraFinalizada) {
-        return <div className="text-center my-5"><CartX size={50}/> <p>Redirigiendo, el carrito está vacío.</p></div>; 
+        return <div className="text-center my-5"><CartX size={50} /> <p>Redirigiendo, el carrito está vacío.</p></div>;
     }
-    
+
     // Muestra un mensaje de éxito si la compra se finalizó
     if (compraFinalizada) {
         return (
@@ -129,7 +144,7 @@ function Checkout() {
     return (
         <Container className="my-5">
             <h2 className="text-center mb-4">Finalizar Compra</h2>
-            
+
             {alerta && <Alert variant={alerta.variant}>{alerta.message}</Alert>}
 
             <Form onSubmit={handleFinalizarCompra}>
@@ -163,7 +178,7 @@ function Checkout() {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                                
+
                                 <h4 className="mb-3 mt-4">Dirección de Entrega</h4>
                                 <Form.Group className="mb-3"><Form.Label>Dirección</Form.Label>
                                     <Form.Control type="text" name="direccion" value={datosCliente.direccion} onChange={handleClienteChange} placeholder="Calle, número, depto/casa" />
@@ -191,7 +206,7 @@ function Checkout() {
                                     <Form.Label>Comentarios de Entrega</Form.Label>
                                     <Form.Control as="textarea" rows={3} name="comentarios" value={datosCliente.comentarios} onChange={handleClienteChange} placeholder="Ej: Tocar timbre 2 veces, entregar en conserjería, etc." />
                                 </Form.Group>
-                                
+
                                 <h4 className="mb-3 mt-4">Método de Pago</h4>
                                 <ListGroup>
                                     <ListGroup.Item>
@@ -239,13 +254,13 @@ function Checkout() {
                                     {carrito.map(item => (
                                         <ListGroup.Item key={item.id} className="d-flex justify-content-between">
                                             <div>
-                                                <span className="fw-bold">{item.nombre}</span><br/>
+                                                <span className="fw-bold">{item.nombre}</span><br />
                                                 <small className="text-muted">{item.cantidad} x {formatoMoneda(item.precio)}</small>
                                             </div>
                                             <span className="fw-bold">{formatoMoneda(item.precio * item.cantidad)}</span>
                                         </ListGroup.Item>
                                     ))}
-                                    
+
                                     <ListGroup.Item className="d-flex justify-content-between bg-light">
                                         <span>Subtotal ({carrito.length} {carrito.length === 1 ? 'producto' : 'productos'}):</span>
                                         <span>{formatoMoneda(subtotal)}</span>
