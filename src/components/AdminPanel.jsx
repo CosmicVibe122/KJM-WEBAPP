@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Table, Button, Modal, Form, Badge, Card, Tab, Tabs, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Table, Button, Modal, Form, Badge, Card, Tab, Tabs, Alert, InputGroup } from 'react-bootstrap';
 import {
     Pencil, Trash, Plus, BoxSeam, Tags, People, FileBarGraph
 } from 'react-bootstrap-icons';
@@ -359,16 +359,20 @@ function AdminPanel() {
                         {/* PESTAÑA 1: PRODUCTOS */}
                         <Tab eventKey="productos" title="Productos">
                             <Card className="shadow-sm border-0">
-                                <Card.Header className="bg-white py-3 d-flex justify-content-between align-items-center">
+                                <Card.Header className="bg-white py-3 d-flex justify-content-between align-items-center flex-wrap">
                                     <h5 className="mb-0 fw-bold">Lista de Productos ({productos.length})</h5>
-                                    <div className="d-flex align-items-center gap-2">
-                                        <Form.Select size="sm" value={filtroCategoriaId} onChange={(e) => setFiltroCategoriaId(e.target.value)} style={{ minWidth: '180px' }}>
+                                    <div className="d-flex align-items-center flex-wrap flex-md-nowrap w-100 w-md-auto ms-md-auto mt-2 mt-md-0 gap-2 gap-sm-3 gap-md-4 gap-lg-5">
+                                        <Form.Select value={filtroCategoriaId} onChange={(e) => setFiltroCategoriaId(e.target.value)} className="form-select-sm flex-grow-1 flex-md-grow-0" style={{ minWidth: '160px' }}>
                                             <option value="">Todas las categorías</option>
                                             {categorias.map(c => (
                                                 <option key={c.id} value={String(c.id)}>{c.nombre}</option>
                                             ))}
                                         </Form.Select>
-                                        {isAdmin && (<Button variant="primary" onClick={() => abrirModalProducto()}><Plus size={20} /> Nuevo Producto</Button>)}
+                                        {isAdmin && (
+                                            <Button variant="primary" className="text-nowrap flex-shrink-0" onClick={() => abrirModalProducto()}>
+                                                <Plus size={20} className="me-1" /> Nuevo Producto
+                                            </Button>
+                                        )}
                                     </div>
                                 </Card.Header>
                                 <Card.Body className="p-0">
