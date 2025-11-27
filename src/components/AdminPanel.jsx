@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Table, Button, Modal, Form, Badge, Card, Tab, Tabs, Alert, InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, Table, Button, Modal, Form, Badge, Card, Tab, Tabs, InputGroup } from 'react-bootstrap';
 import {
     Pencil, Trash, Plus, BoxSeam, Tags, People, FileBarGraph
 } from 'react-bootstrap-icons';
@@ -22,10 +22,7 @@ function AdminPanel() {
     const isAdmin = usuario?.rol === 'ADMIN';
     const isVendedor = usuario?.rol === 'VENDEDOR';
 
-    // --- ESTADOS DE ALERTA ---
-    const [alerta, setAlerta] = useState(null);
-    const [alertaCategoria, setAlertaCategoria] = useState(null);
-    const [alertaUsuario, setAlertaUsuario] = useState(null);
+    // Nota: se eliminan alertas visuales para evaluación — usamos logs en consola
 
     // --- ESTADOS MODAL PRODUCTOS ---
     const [showModalProducto, setShowModalProducto] = useState(false);
@@ -57,7 +54,8 @@ function AdminPanel() {
     // 1. FUNCIÓN PARA EXPORTAR A CSV/EXCEL
     const exportToCSV = (data, filename) => {
         if (!data || data.length === 0) {
-            alert('No hay datos para exportar.');
+            // Mensaje suprimido en UI por evaluación
+            console.warn('No hay datos para exportar.');
             return;
         }
 
@@ -109,7 +107,8 @@ function AdminPanel() {
 
         } catch (error) {
             console.error("Error cargando datos:", error);
-            setAlerta({ variant: 'danger', message: `Fallo al cargar datos: ${error.message}. Verifique el Backend.` });
+            // Mensaje suprimido en UI por evaluación; dejar rastro en consola
+            console.error(`Fallo al cargar datos: ${error.message}. Verifique el Backend.`);
         } finally {
             setCargando(false);
         }
@@ -121,7 +120,8 @@ function AdminPanel() {
 
         // Permitir acceso a ADMIN y VENDEDOR; bloquear otros
         if (usuario === null || (usuario.rol !== 'ADMIN' && usuario.rol !== 'VENDEDOR')) {
-            alert('ACCESO DENEGADO: Rol no autorizado.');
+            // No mostrar alertas en UI — registrar en consola y redirigir
+            console.warn('ACCESO DENEGADO: Rol no autorizado.');
             navigate('/');
             return;
         }
@@ -158,9 +158,10 @@ function AdminPanel() {
             if (!response.ok) throw new Error(`Error ${response.status}`);
 
             setShowModalProducto(false);
-            setAlerta({ variant: 'success', message: `Producto ${modoEdicionProducto ? 'actualizado' : 'creado'} con éxito.` });
+            // Mensaje suprimido en UI por evaluación
+            console.log(`Producto ${modoEdicionProducto ? 'actualizado' : 'creado'} con éxito.`);
             cargarDatos();
-        } catch (error) { setAlerta({ variant: 'danger', message: `FALLO AL GUARDAR: ${error.message}` }); }
+        } catch (error) { console.error(`FALLO AL GUARDAR: ${error.message}`); }
     };
 
     const abrirModalProducto = (producto = null) => {
@@ -190,7 +191,8 @@ function AdminPanel() {
     };
 
     const handleGuardarCategoria = async () => {
-        setAlertaCategoria(null);
+        // Mensajes de categoría suprimidos en UI
+        // setAlertaCategoria(null);
         const metodo = modoEdicionCategoria ? 'PUT' : 'POST';
         const url = modoEdicionCategoria ? `http://localhost:8080/api/categorias/${categoriaForm.id}` : 'http://localhost:8080/api/categorias';
 
@@ -204,8 +206,8 @@ function AdminPanel() {
 
             setShowModalCategoria(false);
             await cargarDatos();
-            setAlertaCategoria({ variant: 'success', message: `Categoría ${categoriaForm.nombre} guardada exitosamente.` });
-        } catch (error) { setAlertaCategoria({ variant: 'danger', message: `FALLO AL GUARDAR: ${error.message}` }); }
+            console.log(`Categoría ${categoriaForm.nombre} guardada exitosamente.`);
+        } catch (error) { console.error(`FALLO AL GUARDAR CATEGORÍA: ${error.message}`); }
     };
 
     // ----------------------------------------------------
@@ -213,7 +215,8 @@ function AdminPanel() {
     // ----------------------------------------------------
 
     const abrirModalUsuario = (user = null) => {
-        setAlertaUsuario(null);
+        // Mensajes de usuario suprimidos en UI
+        // setAlertaUsuario(null);
         if (user) {
             setModoEdicionUsuario(true);
             setUsuarioFormAdmin({
@@ -234,9 +237,9 @@ function AdminPanel() {
                 if (!response.ok) throw new Error(`Error ${response.status}`);
 
                 await cargarDatos();
-                setAlertaUsuario({ variant: 'warning', message: 'Usuario eliminado con éxito.' });
+                console.log('Usuario eliminado con éxito.');
             } catch (error) {
-                setAlertaUsuario({ variant: 'danger', message: `FALLO AL ELIMINAR: ${error.message}` });
+                console.error(`FALLO AL ELIMINAR USUARIO: ${error.message}`);
             }
         }
     };
@@ -252,15 +255,16 @@ function AdminPanel() {
                 if (!response.ok && response.status !== 204) throw new Error(`Error ${response.status}`);
                 // Actualiza lista en memoria para evitar recargar todo
                 setBoletas(prev => prev.filter(b => b.id !== id));
-                setAlerta({ variant: 'success', message: `Boleta ${id} eliminada correctamente.` });
+                console.log(`Boleta ${id} eliminada correctamente.`);
             } catch (error) {
-                setAlerta({ variant: 'danger', message: `Fallo al eliminar boleta: ${error.message}` });
+                console.error(`Fallo al eliminar boleta: ${error.message}`);
             }
         }
     };
 
     const handleGuardarUsuario = async () => {
-        setAlertaUsuario(null);
+        // Mensajes de usuario suprimidos en UI
+        // setAlertaUsuario(null);
 
         const userToSend = { ...usuarioFormAdmin };
         if (modoEdicionUsuario && userToSend.password === '') {
@@ -283,10 +287,10 @@ function AdminPanel() {
 
             setShowModalUsuario(false);
             await cargarDatos();
-            setAlertaUsuario({ variant: 'success', message: `Usuario ${userToSend.nombre} guardado exitosamente.` });
+            console.log(`Usuario ${userToSend.nombre} guardado exitosamente.`);
 
         } catch (error) {
-            setAlertaUsuario({ variant: 'danger', message: `FALLO AL GUARDAR: ${error.message}` });
+            console.error(`FALLO AL GUARDAR USUARIO: ${error.message}`);
         }
     };
 
@@ -346,13 +350,7 @@ function AdminPanel() {
                 <Col md={10} className="bg-light p-5">
                     <h2 className="mb-4">{isVendedor ? 'Panel de Venta' : 'Panel de Administración'}</h2>
 
-                    {alerta && (
-                        <div className={`mb-3 ${alerta.variant === 'danger' ? 'text-danger' : alerta.variant === 'success' ? 'text-success' : alerta.variant === 'warning' ? 'text-warning' : 'text-muted'}`}
-                            onClick={() => setAlerta(null)}
-                        >
-                            {alerta.message}
-                        </div>
-                    )}
+                    {/* Mensajes de alerta deshabilitados para evaluación */}
 
                     <Tabs id="admin-tabs" activeKey={key} onSelect={(k) => setKey(k)} className="mb-3">
 
@@ -417,13 +415,7 @@ function AdminPanel() {
                                 <Card className="shadow-sm border-0">
                                     <Card.Header className="bg-white py-3 d-flex justify-content-between align-items-center"><h5 className="mb-0 fw-bold">Lista de Categorías ({categorias.length})</h5><Button variant="success" onClick={() => abrirModalCategoria()}><Plus size={20} /> Nueva Categoría</Button></Card.Header>
                                     <Card.Body>
-                                        {alertaCategoria && (
-                                            <div className={`mb-3 ${alertaCategoria.variant === 'danger' ? 'text-danger' : alertaCategoria.variant === 'success' ? 'text-success' : alertaCategoria.variant === 'warning' ? 'text-warning' : 'text-muted'}`}
-                                                onClick={() => setAlertaCategoria(null)}
-                                            >
-                                                {alertaCategoria.message}
-                                            </div>
-                                        )}
+                                        {/* Mensajes de categoría deshabilitados para evaluación */}
                                         <Table hover responsive className="mb-0 align-middle">
                                             <thead className="bg-light"><tr><th>ID</th><th>Nombre</th><th className="text-center">Acciones</th></tr></thead>
                                             <tbody>
@@ -452,13 +444,7 @@ function AdminPanel() {
                                         <Button variant="info" className="text-white" onClick={() => abrirModalUsuario()}><Plus size={20} /> Nuevo Usuario</Button>
                                     </Card.Header>
                                     <Card.Body>
-                                        {alertaUsuario && (
-                                            <div className={`mb-3 ${alertaUsuario.variant === 'danger' ? 'text-danger' : alertaUsuario.variant === 'success' ? 'text-success' : alertaUsuario.variant === 'warning' ? 'text-warning' : 'text-muted'}`}
-                                                onClick={() => setAlertaUsuario(null)}
-                                            >
-                                                {alertaUsuario.message}
-                                            </div>
-                                        )}
+                                        {/* Mensajes de usuario deshabilitados para evaluación */}
                                         <Table hover responsive className="mb-0 align-middle">
                                             <thead className="bg-light">
                                                 <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Teléfono</th><th className="text-center">Acciones</th></tr>
@@ -555,7 +541,7 @@ function AdminPanel() {
                                                         </tbody>
                                                     </Table>
                                                     {productos.filter(p => p.stock <= 5).length === 0 && (
-                                                        <Alert variant="info" className="mt-3 text-center">¡Stock saludable! No se encontraron productos con existencias bajas.</Alert>
+                                                        <div className="mt-3 text-center text-info">¡Stock saludable! No se encontraron productos con existencias bajas.</div>
                                                     )}
                                                 </Card.Body>
                                             </Card>
