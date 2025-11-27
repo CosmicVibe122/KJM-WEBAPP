@@ -1,0 +1,232 @@
+/* Estilos generales para la sección Nosotros */
+.seccion-nosotros {
+  font-family: 'Arial', sans-serif;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #333;
+}
+
+.encabezado-nosotros {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.encabezado-nosotros h2 {
+  font-size: 3.2em;
+  color: #2c3e50; /* Un azul oscuro o gris oscuro */
+  margin-bottom: 10px;
+}
+
+.encabezado-nosotros h2 .resaltar {
+  color: #ff4500; /* Un naranja vibrante para resaltar el nombre */
+}
+
+.encabezado-nosotros .subtitulo {
+  font-size: 1.4em;
+  color: #666;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Contenido principal */
+.contenido-principal-nosotros {
+  display: flex;
+  flex-direction: column;
+  gap: 60px; /* Espacio entre los bloques principales */
+}
+
+.bloque-info {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.bloque-info:nth-child(even) { /* Invertir orden en bloques pares para un diseño zig-zag */
+  flex-direction: row-reverse;
+}
+
+.bloque-info .texto-intro,
+.bloque-info .texto-mision-vision {
+  flex: 1;
+}
+
+.bloque-info .imagen-intro,
+.bloque-info .imagen-mision {
+  flex: 1;
+  text-align: center;
+}
+
+.bloque-info img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.bloque-info h3 {
+  font-size: 2.2em;
+  color: #34495e;
+  margin-bottom: 15px;
+}
+
+.bloque-info p {
+  font-size: 1.1em;
+  line-height: 1.7;
+  color: #555;
+}
+
+/* Sección de Valores */
+.nuestros-valores {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.nuestros-valores h3 {
+  font-size: 2.8em;
+  color: #2c3e50;
+  margin-bottom: 40px;
+}
+
+.contenedor-valores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.valor {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 5px solid #ff4500; /* Un detalle de color */
+}
+
+.valor:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.valor h4 {
+  font-size: 1.6em;
+  color: #34495e;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.valor .icono {
+  font-size: 1.8em;
+  margin-right: 10px;
+  line-height: 1; /* Para alinear mejor con el texto */
+}
+
+.valor p {
+  font-size: 1em;
+  line-height: 1.6;
+  color: #666;
+}
+
+/* Call to Action Final */
+.llamada-accion-final {
+  text-align: center;
+  margin-top: 80px;
+  padding: 50px 30px;
+  background-color: #2c3e50; /* Color de fondo oscuro */
+  color: #fff;
+  border-radius: 10px;
+}
+
+.llamada-accion-final p {
+  font-size: 1.6em;
+  margin-bottom: 30px;
+  font-weight: 300;
+}
+
+.btn-conoce-mas {
+  background-color: #ff4500; /* Naranja vibrante */
+  color: white;
+  padding: 15px 35px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-decoration: none; /* Por si lo haces un link */
+}
+
+.btn-conoce-mas:hover {
+  background-color: #e03e00; /* Un naranja un poco más oscuro al pasar el ratón */
+  transform: translateY(-2px);
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 900px) {
+  .bloque-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .bloque-info:nth-child(even) {
+    flex-direction: column; /* También en pares, para que no se invierta */
+  }
+
+  .bloque-info .texto-intro,
+  .bloque-info .texto-mision-vision {
+    order: 2; /* Texto abajo en pantallas pequeñas */
+  }
+
+  .bloque-info .imagen-intro,
+  .bloque-info .imagen-mision {
+    order: 1; /* Imagen arriba en pantallas pequeñas */
+  }
+
+  .encabezado-nosotros h2 {
+    font-size: 2.5em;
+  }
+
+  .encabezado-nosotros .subtitulo {
+    font-size: 1.2em;
+  }
+
+  .bloque-info h3 {
+    font-size: 1.8em;
+  }
+}
+
+@media (max-width: 600px) {
+  .seccion-nosotros {
+    padding: 20px 15px;
+  }
+
+  .encabezado-nosotros h2 {
+    font-size: 2em;
+  }
+
+  .encabezado-nosotros .subtitulo {
+    font-size: 1em;
+  }
+
+  .bloque-info h3 {
+    font-size: 1.5em;
+  }
+
+  .nuestros-valores h3 {
+    font-size: 2em;
+  }
+
+  .valor h4 {
+    font-size: 1.4em;
+  }
+
+  .llamada-accion-final p {
+    font-size: 1.3em;
+  }
+}
