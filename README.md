@@ -1,16 +1,56 @@
-# React + Vite
+# KJM Sports Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación web construida con React + Vite y React Bootstrap, con control de acceso por roles y flujo de compra integrado con un backend Spring Boot.
 
-Currently, two official plugins are available:
+## Requisitos
+- Node.js 18+
+- Backend API corriendo en `http://localhost:8080` (Spring Boot)
+	- Endpoints usados: `GET /api/productos`, `GET /api/categorias`, `GET /api/boletas`, `POST /api/boletas`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Instalación y Ejecución
 
-## React Compiler
+```powershell
+npm install
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+La app de desarrollo quedará disponible en `http://localhost:5173` (por defecto de Vite).
 
-## Expanding the ESLint configuration
+## Roles y Acceso
+- **ADMIN**: acceso total. Puede usar todas las vistas (tienda, carrito, checkout, mis compras, etc.) y el panel de administración.
+- **VENDEDOR**: acceso restringido al panel de ventas/administración. No ve las vistas de tienda en la barra de navegación.
+- **CLIENTE**: acceso a la tienda, carrito, checkout, perfil y mis compras.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Rutas Clave
+- `/` Inicio
+- `/productos` Listado de productos
+- `/categoria/:idCategoria` Filtrado por categoría
+- `/carrito` Carrito de compras
+- `/checkout` Finalización de compra
+- `/mis-compras` Historial de boletas del usuario
+- `/perfil` Perfil del usuario
+- `/admin` Panel de administración/ventas
+
+## Integración de Boletas
+Al finalizar compra se envía `POST /api/boletas` con el siguiente payload:
+
+```json
+{
+	"usuario": { "id": 123 },
+	"detalles": [
+		{ "producto": { "id": 1 }, "cantidad": 2 },
+		{ "producto": { "id": 5 }, "cantidad": 1 }
+	]
+}
+```
+
+El backend (entidad `Boleta`) debe asociar la boleta al usuario (`@ManyToOne Usuario usuario`) y persistir `detalles` (`@OneToMany DetalleBoleta`).
+
+### Confirmación y Mis Compras
+- La página de confirmación muestra número y fecha de boleta, y resumen del pedido.
+- `Mis Compras` lista las boletas del usuario y permite ver el detalle de productos de cada boleta.
+
+## Notas
+- La marca en la barra de navegación redirige a `/admin` para VENDEDOR y a `/` para otros roles.
+- El badge del carrito se oculta cuando la cantidad total es 0.
+
