@@ -11,53 +11,53 @@ const Nosotros = () => {
       </div>
 
       <div className="contenido-principal-nosotros">
-        {/* Sección de Introducción con Imagen de Equipo/Comunidad */}
+
         <div className="bloque-info intro-kjmsports">
           <div className="texto-intro">
             <h3>Nuestra Historia</h3>
             <p>
-              En **KJMSports**, no solo vendemos equipamiento; fomentamos el espíritu deportivo. 
-              Desde nuestra fundación en **2015**, nos hemos dedicado a ofrecer productos 
-              de la más alta calidad y el asesoramiento experto que cada deportista merece. 
-              Hemos crecido de una pequeña tienda local a un referente, gracias a la 
+              En **KJMSports**, no solo vendemos equipamiento; fomentamos el espíritu deportivo.
+              Desde nuestra fundación en **2015**, nos hemos dedicado a ofrecer productos
+              de la más alta calidad y el asesoramiento experto que cada deportista merece.
+              Hemos crecido de una pequeña tienda local a un referente, gracias a la
               confianza y el apoyo de nuestra increíble comunidad atlética.
             </p>
           </div>
           <div className="imagen-intro">
-            {/* Imagen de un grupo de atletas celebrando o entrenando juntos */}
-            <img 
-              src={imagenEquipo} 
-              alt="Equipo de KJMSports celebrando" 
+
+            <img
+              src={imagenEquipo}
+              alt="Equipo de KJMSports celebrando"
             />
           </div>
         </div>
 
-        {/* Sección de Misión y Visión con Imagen de Atleta en Acción */}
+
         <div className="bloque-info mision-vision">
           <div className="imagen-mision">
-            {/* Imagen de un atleta en acción, representando esfuerzo y superación */}
-            <img 
-              src={imagenMision} 
-              alt="Atleta en plena acción, simbolizando la misión" 
+
+            <img
+              src={imagenMision}
+              alt="Atleta en plena acción, simbolizando la misión"
             />
           </div>
           <div className="texto-mision-vision">
             <h3>Nuestra Misión</h3>
             <p>
-              Ser la plataforma líder para atletas de todos los niveles, proporcionando 
-              productos innovadores, seguros y de alto rendimiento que inspiren a superar 
+              Ser la plataforma líder para atletas de todos los niveles, proporcionando
+              productos innovadores, seguros y de alto rendimiento que inspiren a superar
               límites y alcanzar la grandeza.
             </p>
             <h3>Nuestra Visión</h3>
             <p>
-              Crear una comunidad global de deportistas empoderados, donde cada individuo 
-              tenga acceso a las herramientas y el soporte necesarios para vivir una vida 
+              Crear una comunidad global de deportistas empoderados, donde cada individuo
+              tenga acceso a las herramientas y el soporte necesarios para vivir una vida
               activa y plena.
             </p>
           </div>
         </div>
 
-        {/* Sección de Nuestros Valores */}
+
         <div className="nuestros-valores">
           <h3>Nuestros Valores</h3>
           <div className="contenedor-valores">
@@ -84,7 +84,7 @@ const Nosotros = () => {
           </div>
         </div>
 
-        {/* Call to Action Final */}
+
         <div className="llamada-accion-final">
           <p>Únete a la familia KJMSports y vive el deporte al máximo.</p>
           <button className="btn-conoce-mas">Explora nuestros productos</button>

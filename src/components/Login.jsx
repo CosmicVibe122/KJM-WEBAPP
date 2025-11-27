@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Importamos el contexto
+import { useAuth } from '../context/AuthContext';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -29,7 +29,7 @@ function Login() {
         const data = await response.json();
         login(data); // Guardamos el usuario en el contexto global
 
-        // 🔑 Redirección por rol
+
         if (data.rol === 'ADMIN' || data.rol === 'VENDEDOR') {
           navigate('/admin');
         } else if (data.rol === 'CLIENTE') {
@@ -39,7 +39,7 @@ function Login() {
         }
 
       } else {
-        // El servidor devolvió 401 Unauthorized
+
         setError('Credenciales incorrectas. Inténtalo de nuevo.');
       }
     } catch (err) {

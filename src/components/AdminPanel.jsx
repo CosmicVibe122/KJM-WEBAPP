@@ -241,6 +241,24 @@ function AdminPanel() {
         }
     };
 
+    // ----------------------------------------------------
+    // --- 6.1 ELIMINAR BOLETAS (ADMIN) ---
+    // ----------------------------------------------------
+    const handleEliminarBoleta = async (id) => {
+        if (!isAdmin) return; // sólo admin
+        if (window.confirm('¿Seguro que quieres eliminar esta boleta? Esta acción no se puede deshacer.')) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/boletas/${id}`, { method: 'DELETE' });
+                if (!response.ok && response.status !== 204) throw new Error(`Error ${response.status}`);
+                // Actualiza lista en memoria para evitar recargar todo
+                setBoletas(prev => prev.filter(b => b.id !== id));
+                setAlerta({ variant: 'success', message: `Boleta ${id} eliminada correctamente.` });
+            } catch (error) {
+                setAlerta({ variant: 'danger', message: `Fallo al eliminar boleta: ${error.message}` });
+            }
+        }
+    };
+
     const handleGuardarUsuario = async () => {
         setAlertaUsuario(null);
 
@@ -606,6 +624,8 @@ function AdminPanel() {
                                                     <th>Fecha</th>
                                                     <th>Total</th>
                                                     <th>Items</th>
+                                                    <th>Usuario</th>
+                                                    {isAdmin && <th className="text-center">Acciones</th>}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -615,6 +635,14 @@ function AdminPanel() {
                                                         <td>{b.fecha ? new Date(b.fecha).toLocaleString('es-CL') : '-'}</td>
                                                         <td>{new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(b.total || 0)}</td>
                                                         <td>{Array.isArray(b.detalles) ? b.detalles.reduce((acc, d) => acc + (d.cantidad || 0), 0) : 0}</td>
+                                                        <td>{b.usuario?.id ?? b.usuarioId ?? '-'}</td>
+                                                        {isAdmin && (
+                                                            <td className="text-center">
+                                                                <Button variant="danger" size="sm" onClick={() => handleEliminarBoleta(b.id)}>
+                                                                    <Trash />
+                                                                </Button>
+                                                            </td>
+                                                        )}
                                                     </tr>
                                                 ))}
                                             </tbody>

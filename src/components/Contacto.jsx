@@ -84,22 +84,22 @@ const Contacto = () => {
     if (validate()) {
       console.log('Formulario enviado:', formData);
 
-      // 🔑 1. Establecer el estado de éxito (REEMPLAZA EL ALERT)
+
       setEnvioExitoso(true);
 
-      // 2. Resetear el formulario
+
       setFormData({ nombre: '', correo: '', mensaje: '' });
       setCaracteresMensaje(0);
       setErrors({});
 
-      // 3. Opcional: Ocultar el mensaje después de 5 segundos
+
       setTimeout(() => {
         setEnvioExitoso(false);
       }, 5000);
 
     } else {
       console.log('Errores en el formulario:', errors);
-      // No se necesita alert aquí, los errores se muestran al lado de los campos
+
     }
   };
 
@@ -111,7 +111,7 @@ const Contacto = () => {
             <Card.Body>
               <h2 className="text-center mb-4 titulo-contacto">Contáctanos</h2>
 
-              {/* 🔑 MOSTRAR EL MENSAJE DE ÉXITO CONDICIONALMENTE */}
+
               {envioExitoso && (
                 <Alert variant="success" onClose={() => setEnvioExitoso(false)} dismissible className="alerta-exito">
                   ¡Mensaje enviado con éxito! Nos pondremos en contacto pronto.
@@ -119,7 +119,7 @@ const Contacto = () => {
               )}
 
               <Form onSubmit={handleSubmit}>
-                {/* Campo Nombre */}
+
                 <Form.Group className="mb-3" controlId="formNombre">
                   <Form.Label>Nombre</Form.Label>
                   <Form.Control
@@ -138,7 +138,7 @@ const Contacto = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                {/* Campo Correo */}
+
                 <Form.Group className="mb-3" controlId="formCorreo">
                   <Form.Label>Correo</Form.Label>
                   <Form.Control
@@ -157,7 +157,7 @@ const Contacto = () => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                {/* Campo Mensaje */}
+
                 <Form.Group className="mb-3" controlId="formMensaje">
                   <Form.Label>Mensaje</Form.Label>
                   <Form.Control

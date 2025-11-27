@@ -14,12 +14,12 @@
 
 .encabezado-nosotros h2 {
   font-size: 3.2em;
-  color: #2c3e50; /* Un azul oscuro o gris oscuro */
+  color: #2c3e50; 
   margin-bottom: 10px;
 }
 
 .encabezado-nosotros h2 .resaltar {
-  color: #ff4500; /* Un naranja vibrante para resaltar el nombre */
+  color: #ff4500; 
 }
 
 .encabezado-nosotros .subtitulo {
@@ -29,11 +29,11 @@
   margin: 0 auto;
 }
 
-/* Contenido principal */
+
 .contenido-principal-nosotros {
   display: flex;
   flex-direction: column;
-  gap: 60px; /* Espacio entre los bloques principales */
+  gap: 60px; 
 }
 
 .bloque-info {
@@ -46,7 +46,7 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.bloque-info:nth-child(even) { /* Invertir orden en bloques pares para un diseño zig-zag */
+.bloque-info:nth-child(even) { 
   flex-direction: row-reverse;
 }
 
@@ -80,7 +80,7 @@
   color: #555;
 }
 
-/* Sección de Valores */
+
 .nuestros-valores {
   text-align: center;
   margin-top: 60px;
@@ -134,12 +134,12 @@
   color: #666;
 }
 
-/* Call to Action Final */
+
 .llamada-accion-final {
   text-align: center;
   margin-top: 80px;
   padding: 50px 30px;
-  background-color: #2c3e50; /* Color de fondo oscuro */
+  background-color: #2c3e50; 
   color: #fff;
   border-radius: 10px;
 }
@@ -151,7 +151,7 @@
 }
 
 .btn-conoce-mas {
-  background-color: #ff4500; /* Naranja vibrante */
+  background-color: #ff4500; 
   color: white;
   padding: 15px 35px;
   border: none;
@@ -159,15 +159,15 @@
   font-size: 1.2em;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  text-decoration: none; /* Por si lo haces un link */
+  text-decoration: none; 
 }
 
 .btn-conoce-mas:hover {
-  background-color: #e03e00; /* Un naranja un poco más oscuro al pasar el ratón */
+  background-color: #e03e00; 
   transform: translateY(-2px);
 }
 
-/* Media Queries para responsividad */
+
 @media (max-width: 900px) {
   .bloque-info {
     flex-direction: column;
@@ -175,17 +175,17 @@
   }
 
   .bloque-info:nth-child(even) {
-    flex-direction: column; /* También en pares, para que no se invierta */
+    flex-direction: column; 
   }
 
   .bloque-info .texto-intro,
   .bloque-info .texto-mision-vision {
-    order: 2; /* Texto abajo en pantallas pequeñas */
+    order: 2; 
   }
 
   .bloque-info .imagen-intro,
   .bloque-info .imagen-mision {
-    order: 1; /* Imagen arriba en pantallas pequeñas */
+    order: 1; 
   }
 
   .encabezado-nosotros h2 {

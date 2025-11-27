@@ -7,7 +7,6 @@ function ConfirmacionCompra() {
     const location = useLocation();
     const { orderDetails } = location.state || {};
 
-    // 🔑 CORRECCIÓN: Generar y guardar el ID de la orden una sola vez
     const [orderId] = useState(() => {
         if (orderDetails?.numeroBoleta) return orderDetails.numeroBoleta;
         const randomNum = Math.floor(Math.random() * 900000) + 100000;
@@ -35,10 +34,10 @@ function ConfirmacionCompra() {
         );
     }
 
-    // Desestructurar datos clave
+
     const { cliente, productos, metodoPago, total } = orderDetails;
 
-    // Lógica para imprimir
+
     const handlePrint = () => {
         window.print();
     };

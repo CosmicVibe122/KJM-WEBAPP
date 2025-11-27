@@ -28,11 +28,11 @@ function MiPerfil() {
                             <div className="mb-2"><strong>Nombre:</strong> {usuario.nombre}</div>
                             <div className="mb-2"><strong>Email:</strong> {usuario.email}</div>
                             <div className="mb-2"><strong>Teléfono:</strong> {usuario.telefono || 'N/A'}</div>
-                            {/* Rol oculto a solicitud */}
+
                         </Col>
                         <Col md={6}>
                             <div className="mb-2"><strong>Dirección:</strong> {usuario.direccion || 'N/A'}</div>
-                            {/* Campos adicionales si existen en el modelo */}
+
                         </Col>
                     </Row>
                 </Card.Body>
