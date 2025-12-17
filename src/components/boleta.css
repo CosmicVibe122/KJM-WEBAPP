@@ -24,9 +24,11 @@
     box-shadow: none !important;
     border: none !important;
   }
-  /* No imprimir los botones de navegación */
-  .no-print {
+
+  /* Asegurar que los elementos marcados como no imprimibles no aparezcan */
+  .no-print, .no-print * {
     display: none !important;
+    visibility: hidden !important;
   }
 }
 
