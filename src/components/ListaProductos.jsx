@@ -18,7 +18,7 @@ function ListaProductos() {
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/productos')
+    fetch('/api/productos')
       .then(response => response.json())
       .then(data => {
         if (idCategoria) {

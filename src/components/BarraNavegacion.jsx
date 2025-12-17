@@ -19,7 +19,7 @@ function BarraNavegacion() {
 
   useEffect(() => {
     // Simulación de carga de categorías de la API
-    fetch('http://localhost:8080/api/categorias')
+    fetch('/api/categorias')
       .then(response => response.json())
       .then(data => setCategorias(data))
       .catch(error => console.error('Error cargando categorías:', error));

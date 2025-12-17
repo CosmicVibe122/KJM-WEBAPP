@@ -14,7 +14,7 @@ function MisCompras() {
     useEffect(() => {
         async function cargar() {
             try {
-                const res = await fetch('http://localhost:8080/api/boletas');
+                const res = await fetch('/api/boletas');
                 if (!res.ok) throw new Error(`Error ${res.status}`);
                 const data = await res.json();
                 const filtered = usuario
@@ -93,7 +93,7 @@ function MisCompras() {
                                                             try {
                                                                 setErrorDetalle(prev => ({ ...prev, [b.id]: undefined }));
                                                                 setCargandoDetalle(prev => ({ ...prev, [b.id]: true }));
-                                                                const res = await fetch(`http://localhost:8080/api/boletas/${b.id}`);
+                                                                const res = await fetch(`/api/boletas/${b.id}`);
                                                                 if (res.status === 404) {
                                                                     setBoletas(prev => prev.map(x => x.id === b.id ? { ...x, detalles: [] } : x));
                                                                 } else if (!res.ok) {
