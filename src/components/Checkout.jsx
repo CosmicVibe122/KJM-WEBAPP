@@ -75,7 +75,7 @@ function Checkout() {
 
         try {
             // Enviar boleta al backend
-            const res = await fetch('http://localhost:8080/api/boletas', {
+            const res = await fetch('/api/boletas', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(boletaPayload)

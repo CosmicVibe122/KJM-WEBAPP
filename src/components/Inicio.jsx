@@ -17,7 +17,7 @@ function Inicio() {
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/productos')
+    fetch('/api/productos')
       .then(response => response.json())
       .then(data => {
         const barajados = data.sort(() => 0.5 - Math.random());

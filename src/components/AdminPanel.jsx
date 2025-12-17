@@ -90,10 +90,10 @@ function AdminPanel() {
     async function cargarDatos() {
         try {
             const responses = await Promise.all([
-                fetch('http://localhost:8080/api/productos'),
-                fetch('http://localhost:8080/api/categorias'),
-                fetch('http://localhost:8080/api/usuarios'),
-                fetch('http://localhost:8080/api/boletas')
+                fetch('/api/productos'),
+                fetch('/api/categorias'),
+                fetch('/api/usuarios'),
+                fetch('/api/boletas')
             ]);
 
             const [dataProd, dataCat, dataUser, dataBoletas] = await Promise.all(
@@ -136,7 +136,7 @@ function AdminPanel() {
     const handleEliminarProducto = async (id) => {
         if (window.confirm('¿Seguro que quieres eliminar este producto?')) {
             try {
-                const response = await fetch(`http://localhost:8080/api/productos/${id}`, { method: 'DELETE' });
+                const response = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
                 if (!response.ok) throw new Error(`Error ${response.status}: La eliminación falló.`);
                 cargarDatos();
             } catch (error) { /* sin mensaje de alerta en UI */ }
@@ -145,7 +145,7 @@ function AdminPanel() {
 
     const handleGuardarProducto = async () => {
         const metodo = modoEdicionProducto ? 'PUT' : 'POST';
-        const url = modoEdicionProducto ? `http://localhost:8080/api/productos/${productoForm.id}` : 'http://localhost:8080/api/productos';
+        const url = modoEdicionProducto ? `/api/productos/${productoForm.id}` : '/api/productos';
         const categoriaId = parseInt(productoForm.categoria?.id);
         const productoAEnviar = { ...productoForm, categoria: categoriaId ? { id: categoriaId } : null };
 
@@ -194,7 +194,7 @@ function AdminPanel() {
         // Mensajes de categoría suprimidos en UI
         // setAlertaCategoria(null);
         const metodo = modoEdicionCategoria ? 'PUT' : 'POST';
-        const url = modoEdicionCategoria ? `http://localhost:8080/api/categorias/${categoriaForm.id}` : 'http://localhost:8080/api/categorias';
+        const url = modoEdicionCategoria ? `/api/categorias/${categoriaForm.id}` : '/api/categorias';
 
         try {
             const response = await fetch(url, {
@@ -233,7 +233,7 @@ function AdminPanel() {
     const handleEliminarUsuario = async (id) => {
         if (window.confirm('¿Seguro que quieres eliminar este usuario?')) {
             try {
-                const response = await fetch(`http://localhost:8080/api/usuarios/${id}`, { method: 'DELETE' });
+                const response = await fetch(`/api/usuarios/${id}`, { method: 'DELETE' });
                 if (!response.ok) throw new Error(`Error ${response.status}`);
 
                 await cargarDatos();
@@ -251,7 +251,7 @@ function AdminPanel() {
         if (!isAdmin) return; // sólo admin
         if (window.confirm('¿Seguro que quieres eliminar esta boleta? Esta acción no se puede deshacer.')) {
             try {
-                const response = await fetch(`http://localhost:8080/api/boletas/${id}`, { method: 'DELETE' });
+                const response = await fetch(`/api/boletas/${id}`, { method: 'DELETE' });
                 if (!response.ok && response.status !== 204) throw new Error(`Error ${response.status}`);
                 // Actualiza lista en memoria para evitar recargar todo
                 setBoletas(prev => prev.filter(b => b.id !== id));
@@ -274,7 +274,7 @@ function AdminPanel() {
         if (!userToSend.telefono) userToSend.telefono = "";
 
         const metodo = modoEdicionUsuario ? 'PUT' : 'POST';
-        const url = modoEdicionUsuario ? `http://localhost:8080/api/usuarios/${userToSend.id}` : 'http://localhost:8080/api/usuarios';
+        const url = modoEdicionUsuario ? `/api/usuarios/${userToSend.id}` : '/api/usuarios';
 
         try {
             const response = await fetch(url, {
