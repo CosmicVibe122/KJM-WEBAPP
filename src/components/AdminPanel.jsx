@@ -17,6 +17,8 @@ function AdminPanel() {
     const [usuariosAdmin, setUsuariosAdmin] = useState([]);
     const [filtroCategoriaId, setFiltroCategoriaId] = useState('');
     const [boletas, setBoletas] = useState([]);
+    const [ventasMes, setVentasMes] = useState(0);
+    const [productosMasVendidos, setProductosMasVendidos] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [key, setKey] = useState('productos');
     const isAdmin = usuario?.rol === 'ADMIN';
@@ -105,6 +107,46 @@ function AdminPanel() {
             setUsuariosAdmin(Array.isArray(dataUser) ? dataUser : []);
             setBoletas(Array.isArray(dataBoletas) ? dataBoletas : []);
 
+            // Calcular ventas del mes y productos más vendidos
+            try {
+                const now = new Date();
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+
+                const boletasArray = Array.isArray(dataBoletas) ? dataBoletas : [];
+
+                // Ventas del mes: sumar `total` de boletas del mes actual
+                const ventasMesTotal = boletasArray.reduce((acc, b) => {
+                    const fecha = b?.fecha ? new Date(b.fecha) : null;
+                    if (!fecha) return acc;
+                    if (fecha.getMonth() === currentMonth && fecha.getFullYear() === currentYear) {
+                        return acc + (Number(b.total) || 0);
+                    }
+                    return acc;
+                }, 0);
+                setVentasMes(ventasMesTotal);
+
+                // Productos más vendidos: agregar cantidades desde detalles de boletas
+                const productoMap = new Map();
+                boletasArray.forEach(b => {
+                    const detalles = Array.isArray(b.detalles) ? b.detalles : [];
+                    detalles.forEach(d => {
+                        const pid = d.producto?.id ?? d.productoId ?? d.id;
+                        const nombre = d.producto?.nombre || d.nombre || 'Desconocido';
+                        const cantidad = Number(d.cantidad) || 0;
+                        if (!pid) return;
+                        const existing = productoMap.get(pid) || { id: pid, nombre, cantidad: 0 };
+                        existing.cantidad += cantidad;
+                        productoMap.set(pid, existing);
+                    });
+                });
+
+                const topProductos = Array.from(productoMap.values()).sort((a, b) => b.cantidad - a.cantidad).slice(0, 5);
+                setProductosMasVendidos(topProductos);
+            } catch (errCalc) {
+                console.error('Error calculando métricas de ventas:', errCalc);
+            }
+
         } catch (error) {
             console.error("Error cargando datos:", error);
             // Mensaje suprimido en UI por evaluación; dejar rastro en consola
@@ -158,7 +200,6 @@ function AdminPanel() {
             if (!response.ok) throw new Error(`Error ${response.status}`);
 
             setShowModalProducto(false);
-            // Mensaje suprimido en UI por evaluación
             console.log(`Producto ${modoEdicionProducto ? 'actualizado' : 'creado'} con éxito.`);
             cargarDatos();
         } catch (error) { console.error(`FALLO AL GUARDAR: ${error.message}`); }
@@ -251,14 +292,14 @@ function AdminPanel() {
         if (!isAdmin) return; // sólo admin
         if (window.confirm('¿Seguro que quieres eliminar esta boleta? Esta acción no se puede deshacer.')) {
             try {
-                const response = await fetch(`/api/boletas/${id}`, { method: 'DELETE' });
-                if (!response.ok && response.status !== 204) throw new Error(`Error ${response.status}`);
-                // Actualiza lista en memoria para evitar recargar todo
-                setBoletas(prev => prev.filter(b => b.id !== id));
-                console.log(`Boleta ${id} eliminada correctamente.`);
-            } catch (error) {
-                console.error(`Fallo al eliminar boleta: ${error.message}`);
-            }
+                    const response = await fetch(`/api/boletas/${id}`, { method: 'DELETE' });
+                    if (!response.ok && response.status !== 204) throw new Error(`Error ${response.status}`);
+                    // Actualiza lista en memoria para evitar recargar todo
+                    setBoletas(prev => prev.filter(b => b.id !== id));
+                    console.log(`Boleta ${id} eliminada correctamente.`);
+                } catch (error) {
+                    console.error(`Fallo al eliminar boleta: ${error.message}`);
+                }
         }
     };
 
@@ -505,6 +546,41 @@ function AdminPanel() {
                                                         {productos.filter(p => p.stock <= 5).length}
                                                     </p>
                                                     <small>Productos con menos de 5 unidades.</small>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                    </Row>
+
+                                    {/* Ventas del Mes y Productos Más Vendidos */}
+                                    <Row className="g-4 mb-5">
+                                        <Col md={6}>
+                                            <Card className="shadow-sm border-0 h-100 bg-warning text-dark">
+                                                <Card.Body>
+                                                    <h4 className="card-title">💸 Ventas del Mes</h4>
+                                                    <p className="display-5 fw-bold">{formatoMoneda(ventasMes)}</p>
+                                                    <small>Ventas totales registradas en el mes actual.</small>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                        <Col md={6}>
+                                            <Card className="shadow-sm border-0 h-100">
+                                                <Card.Header className="fw-bold bg-light">Productos Más Vendidos (Top 5)</Card.Header>
+                                                <Card.Body>
+                                                    {productosMasVendidos.length === 0 ? (
+                                                        <div className="text-center text-muted">No hay ventas registradas todavía.</div>
+                                                    ) : (
+                                                        <ul className="list-group list-group-flush">
+                                                            {productosMasVendidos.map(p => (
+                                                                <li key={p.id} className="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <span>{p.nombre}</span>
+                                                                    <span className="badge bg-primary rounded-pill">{p.cantidad} u.</span>
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                    <div className="mt-3 d-flex justify-content-end">
+                                                        <Button variant="outline-secondary" size="sm" onClick={() => exportToCSV(productosMasVendidos.map(p => ({ id: p.id, nombre: p.nombre, cantidad: p.cantidad })), 'Top_Productos')}>Exportar CSV</Button>
+                                                    </div>
                                                 </Card.Body>
                                             </Card>
                                         </Col>
